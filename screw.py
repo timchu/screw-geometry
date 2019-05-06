@@ -163,18 +163,19 @@ def mass_hypothesis_test(n=1000, alpha=1.0/3, numpoints=10):
 def p_circumradius_change(alpha,l):
 	l2 = list(np.sort(l))
 	l1 = l2[:-1]
-	circum_2_p = pow(rad_squared(l2, alpha), 1.0/(2*alpha))
-	circum_1_p = pow(rad_squared(l1, alpha), 1.0/(2*alpha))
+	circum_2_p = rad_alpha(l2, alpha)
+	circum_1_p = rad_alpha(l1, alpha)
 	print(circum_2_p)
 	print(circum_1_p)
 	print(circum_2_p-circum_1_p)
 	print("")
 	return circum_2_p - circum_1_p
+	
 def square_circumradius_change(alpha, l):
 	l2 = list(np.sort(l))
 	l1 = l2[:-1]
-	circum_2_p = rad_squared(l2, 2*alpha)
-	circum_1_p = rad_squared(l1, 2*alpha)
+	circum_2_p = rad_squared(l2, alpha)
+	circum_1_p = rad_squared(l1, alpha)
 	print(circum_2_p)
 	print(circum_1_p)
 	print(circum_2_p-circum_1_p)
@@ -185,14 +186,20 @@ def hypothesis_test(l1, new_point, alpha=1.0/3, p = 2):
 	old_length = l1[-1] - l1[0]
 	new_length = new_point - l1[0]
 	l2 = l1 + [new_point]
-	circum_2_p = pow(rad_squared(l2, alpha), p/2.0)
-	circum_1_p = pow(rad_squared(l1, alpha), p/2.0)
+	circum_2_p = rad_p(l2, alpha, p)
+	circum_1_p = rad_p(l1, alpha, p)
 	circum_val = circum_2_p-circum_1_p
 	new_val = pow(pow(new_length, alpha)/2, p) - pow(pow(old_length, alpha)/2, p)
 	print(circum_val)
 	print(new_val)
 	print(circum_val/new_val)
 	return circum_val > new_val - eps
+
+def rad_alpha(ls, alpha=1/3):
+	return rad_p(ls, alpha, 1/alpha)
+
+def rad_p(ls, alpha=1/3, p = 3):
+	return pow(rad_squared(ls, alpha), p/2.0)
 
 def rad_squared(ls, alpha=1.0/3):
 	k = np.linalg.inv(cm(ls, 2*alpha))

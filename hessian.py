@@ -54,19 +54,20 @@ def gaps_approx_hessian(func, ls):
 	# f(x+i+j)-f(x+i)-f(x+i)+f(x)
 	# Deriv = lim(lim f(x+i+j)-f(x+j)/i) - f(x+j)-f(x)
 
-#INconclusive test. For some epsilon, the test doesn't work when p=2.
-
-def convexity_test():
+def function_convexity_test(func):
 	for i in range(1000):
-		n  = 3 
+		n  = 10
 		# Ensures the average spacing is around 10.
 		ls = 10*n*np.sort(np.random.rand(n))
 		# Ensures that two points aren't closer together than epsilon.
 		ls = [ls[i] + 3*i*eps for i in range(ls)]
-		if not(NSD(approx_hessian(diam_p, ls))):
+		if not(NSD(approx_hessian(func, ls))):
 				return False
 	return True
 
+#INconclusive test. For some epsilon, the test doesn't work when p=2.
+def convexity_test():
+	return func_is_convex(diam_p)
 
 def NSD(P):
 	return(PSD(-P))

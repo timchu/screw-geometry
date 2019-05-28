@@ -32,6 +32,11 @@ def radius_thing(D):
 # concavity Test:
 # Test whether a^T A a + b^T B b <= 2* (a+b)/2^T (A+B/2)(a+b)/2
 # Result: fails, for A and B from distance matrix |i-j|. See big_concavity_test
+# Even the hacked concavity test fails.
+def hacked_concavity_test(a,A,b,B):
+	concavity_vals = [(c*a + (1-c)*b) @ (A+B)/2 @ (c*a+(1-c)*b) for c in np.linspace(-10, 10, 3000)]
+	return  a @ A @ a + b @ B @ b - 2 * max(concavity_vals)
+
 def concavity_test(a, A, b, B):
 	concavity_val =  a @ A @ a + b @ B @ b - 2 * (a+b)/2 @ (A+B)/2 @ (a+b)/2
 	return concavity_val
@@ -60,6 +65,47 @@ def big_concavity_test():
 			print("Fails second concavity test")
 			return False
 	return True
+# New Concavity Test:
+# Test whether a^T A a + b^T B b <= avg thing
+# when A and B are the same matrix but with only the last distance changed.
+def new_big_concavity_test():
+	for i in range(100):	
+		n = 3
+		ls = list(np.sort(np.random.rand(n)))
+		A = screw(ls, 1)
+		ls2 = ls[:-1] + [ls[-1]+np.random.rand()]
+		B = screw(ls2, 1)
+		(a,b) = np.random.rand(n), np.random.rand(n)
+		(a,b) = a/sum(a), b/sum(b)
+		print(i)
+		if (concavity_test(a, A, b, B) >= 0.00001):
+			print(ls, ls2, a,b)
+			print("")
+			print(A,B,(A+B)/2)
+			print("Concavity Value:", concavity_test(a,A,b,B))
+			print("Fails big concavity test")
+			return False
+	return True
+
+def p_hacked_concavity_test():
+	for i in range(100):	
+		n = 3
+		ls = list(np.sort(np.random.rand(n)))
+		A = screw(ls, 1)
+		ls2 = ls[:-1] + [ls[-1]+np.random.rand()]
+		B = screw(ls2, 1)
+		(a,b) = np.random.rand(n), np.random.rand(n)
+		(a,b) = a/sum(a), b/sum(b)
+		print(i)
+		if (hacked_concavity_test(a, A, b, B) >= 0.00001):
+			print(ls, ls2, a,b)
+			print("")
+			print(A,B,(A+B)/2)
+			print("Concavity Value:", hacked_concavity_test(a,A,b,B))
+			print("Fails hacked concavity test")
+			return False
+	return True
+
 # I attempted to test whether if D is negative type, then 
 # max(x, y, z, orthogonal to ones) x^T D1 x + y^T D2 y <= z^T avg(D1, D2) z
 # It seems always false :D :D :D :D :D :D :D :D.

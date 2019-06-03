@@ -169,7 +169,7 @@ def res(M, r):
 			Mhat[i][j] = M[s][t]
 	return Mhat
 
-# Distance matrix squared, of screw with screw func |i-j|^power.
+# Distance matrix, of screw with screw func |i-j|^power.
 def screw(ls, power):
 	n = len(ls)
 	M = np.zeros((n, n))
@@ -178,3 +178,4 @@ def screw(ls, power):
 			D = abs(ls[i]-ls[j])
 			M[i][j] = pow(D, power)
 	return M
+

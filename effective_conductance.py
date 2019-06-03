@@ -25,6 +25,20 @@ def path_adjacency(n):
 		A[i-1][i]=1
 	return A
 
+def permuted_cycle_adjacency(n):
+	ls = np.random.permutation(n)
+	A = np.zeros((n,n))
+	for q in range(1, n):
+		i = ls[q]
+		i0 = ls[q-1]
+		A[i][i0]=1
+		A[i0][i]=1
+	i = ls[n-1]
+	i0 = ls[0]
+	A[i][i0]=1
+	A[i0][i]=1
+	return A
+
 def cycle_adjacency(n):
 	A = np.zeros((n,n))
 	for i in range(1, n):
@@ -58,21 +72,31 @@ def neg_er(A, e1, e2):
 def effective_conductance(A, e1, e2):
 	return 1/effective_resistance(A, e1, e2)
 
+def resistance_distances(A):
+	n = len(A)
+	lls = [[effective_resistance(A, i, j) for i in range(n)] for j in range(n)]
+	return np.array(lls)
+
+def inverse_ones_times_resistance(A):
+	n = len(A)
+	ones = np.ones(n)
+	return nk
+
 # The input Func takes in adjacency matrix and e1, e2
 def concavity_test(func):
 	for i in range(1000):
 		print(i)
 		n = 10
 		A = 2*path_adjacency(n)
-#		(e1, e2) = (np.random.randint(0, n), np.random.randint(0, n))
+		B = random_graph_adjacency(n, n)
+		(A,B)=(permuted_cycle_adjacency(n), permuted_cycle_adjacency(n))
 		(e1, e2) = (0, n-1)
-#		B = random_graph_adjacency(n, n)
-		B = 2*weighted_path_adjacency(n)
 		# If: convex anywhere, false.
 		convex_val = func(A, e1, e2)+func(B, e1, e2) - 2*func((A+B)/2, e1, e2)
 		print(convex_val)
 		print (func(A, e1, e2))
 		print (func(B, e1, e2))
+		print((func(A+B)/2, e1, e2))
 		if convex_val > 0.00001:
 			return False
 	return True

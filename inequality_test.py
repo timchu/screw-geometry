@@ -26,8 +26,17 @@ def radius_thing(D):
 	ones = np.ones(n)
 	two_rad_squared = 1/(ones @ np.linalg.inv(D) @ ones) # You need to invert to get the radius
 	b = np.linalg.inv(D)@ones*two_rad_squared
-	print ("Barycentric Coords are:")
+	print ("Barycentric Coords are: ", b)
 	return two_rad_squared
+
+def circumcenter_barycentric_coords(D, printme=False):
+	n = len(D)
+	ones = np.ones(n)
+	two_rad_squared = 1/(ones @ np.linalg.inv(D) @ ones) # You need to invert to get the radius
+	b = np.linalg.inv(D)@ones*two_rad_squared
+	if printme:
+		print ("Barycentric Coords are: ", b)
+	return b
 
 # concavity Test:
 # Test whether a^T A a + b^T B b <= 2* (a+b)/2^T (A+B/2)(a+b)/2
